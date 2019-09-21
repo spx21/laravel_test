@@ -17,8 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::get('/Products', 'ProductController@all')->name('Products.all');
+Route::get('/Products', 'ProductController@getAll')->name('Products.getAll');
 
 Route::post('/Products', 'ProductController@create')->name('Products.create');
 
@@ -26,4 +25,4 @@ Route::get('/Products/{Product}', 'ProductController@show')->name('Products.show
 
 Route::put('/Products/{Product}', 'ProductController@update')->name('Products.update');
 
-Route::delete('/Products/{Product}', 'ProductController@destory')->name('Products.destroy');
+Route::delete('/Products/{Product}', 'ProductController@destroy')->name('Products.destroy');

@@ -23,18 +23,18 @@
                                 <th>No.</th>
                                 <th>Title</th>
                                 <th>Description</th>
-                                <th>Action</th>
+                                <th width="200px">Action</th>
                             </tr>
                             <tr ng-repeat="(index, product) in products">
-                                <!-- <td>
+                                <td>
                                     @{{ index + 1 }}
                                 </td>
-                                <td>@{{ product.title }}</td>
-                                <td>@{{ product.description }}</td>
+                                <td>@{{ product.Title }}</td>
+                                <td>@{{ product.Description }}</td>
                                 <td>
                                     <button class="btn btn-success btn-xs" ng-click="toggle('edit', product.id)">Edit</button>
                                     <button class="btn btn-danger btn-xs" ng-click="confirmDelete(product.id)" >Delete</button>
-                                </td> -->
+                                </td>
                             </tr>
                         </table>
                     </div>

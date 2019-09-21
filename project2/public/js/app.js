@@ -25,25 +25,43 @@ var app = angular.module('AssessmentCRUD', []
     }]);
 
 app.controller('ProductController', ['$scope', '$http', function ($scope, $http) {
-    var API_URL = "";
+    var API_URL = "api/";
     
    $scope.product = {};
    $scope.modal_title = "Add New Product";
+
+   $scope.products = [];
+ 
+   // List tasks
+   
+   function loadProducts() {
+         var url = API_URL + "Products";
+        $http.get(url).then(function (response) {
+            console.log(response);
+            $scope.products = response.data.products;
+        });
+   };
+   $scope.loadProducts = loadProducts;
+   
+    $scope.loadProducts();
     $scope.toggle = function(modalstate, id) {
         $scope.modalstate = modalstate;
 
         switch (modalstate) {
             case 'add':
+                $scope.product = {};
                 $scope.modal_title = "Add New Product";
                 break;
             case 'edit':
                 $scope.modal_title = "Product Detail";
                 $scope.id = id;
-                $http.get(API_URL + 'products/' + id)
-                        .success(function(response) {
+                $http.get(API_URL + 'Products/' + id)
+                        .then(function(response) {
                             console.log(response);
-                            $scope.product = response;
+                            $scope.product = response.data;
+                            $scope.product.Price = parseFloat($scope.product.Price);
                         });
+            
                 break;
             default:
                 break;
@@ -54,20 +72,21 @@ app.controller('ProductController', ['$scope', '$http', function ($scope, $http)
 
   
     $scope.save = function(modalstate, id) {
-        var url = API_URL + "products";
-        
-        if (modalstate === 'edit'){
-            url += "/" + id;
+        var url = API_URL + "Products";
+        var method = "POST";
+        if ($scope.modal_title === "Product Detail"){
+            url += "/" + $scope.product.id;
+            method = "PUT";
         }
-        
+        console.log($scope.product);
         $http({
-            method: 'POST',
+            method: method,
             url: url,
             data: $.param($scope.product),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }, function(data){
             console.log(data);
-            location.reload();
+            loadProducts();
         }, function(data){
 
             console.log(data);
@@ -81,7 +100,7 @@ app.controller('ProductController', ['$scope', '$http', function ($scope, $http)
         if (isConfirmDelete) {
             $http({
                 method: 'DELETE',
-                url: API_URL + 'products/' + id
+                url: API_URL + 'Products/' + id
             }, function(data){
                 console.log(data);
                 location.reload();
