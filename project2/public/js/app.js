@@ -117,3 +117,98 @@ app.controller('ProductController', ['$scope', '$http', function ($scope, $http)
          
 }]);
 
+
+
+app.controller('OrderController', ['$scope', '$http', function ($scope, $http) {
+    var API_URL = "api/";
+    
+   $scope.order = {};
+   $scope.modal_title = "Add New Order";
+
+   $scope.orders = [];
+ 
+   // List tasks
+   
+   function loadOrders() {
+         var url = API_URL + "Orders";
+        $http.get(url).then(function (response) {
+            console.log(response);
+            $scope.orders = response.data.orders;
+        });
+   };
+   $scope.loadOrders = loadOrders;
+   
+    $scope.loadOrders();
+    $scope.toggle = function(modalstate, id) {
+        $scope.modalstate = modalstate;
+
+        switch (modalstate) {
+            case 'add':
+                $scope.order = {};
+                $scope.modal_title = "Add New Order";
+                break;
+            case 'edit':
+                $scope.modal_title = "Order Detail";
+                $scope.id = id;
+                $http.get(API_URL + 'Orders/' + id)
+                        .then(function(response) {
+                            console.log(response);
+                            $scope.order = response.data;
+                            $scope.order.Price = parseFloat($scope.order.Price);
+                        });
+            
+                break;
+            default:
+                break;
+        }
+        console.log(id);
+        $('#myModal').modal('show');
+    }
+
+  
+    $scope.save = function(modalstate, id) {
+        var url = API_URL + "Orders";
+        var method = "POST";
+        if ($scope.modal_title === "Order Detail"){
+            url += "/" + $scope.order.id;
+            method = "PUT";
+        }
+        console.log($scope.order);
+        $http({
+            method: method,
+            url: url,
+            data: $.param($scope.order),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }, function(data){
+            console.log(data);
+            loadOrders();
+        }, function(data){
+
+            console.log(data);
+                    alert('Unable to save');
+        });
+        $('#myModal').modal('hide');
+    }
+
+    $scope.confirmDelete = function(id) {
+        var isConfirmDelete = confirm('Are you sure you want to delete this record?');
+        if (isConfirmDelete) {
+            $http({
+                method: 'DELETE',
+                url: API_URL + 'Orders/' + id
+            }, function(data){
+                console.log(data);
+                location.reload();
+            }, function(data){
+
+                console.log(data);
+                        alert('Unable to delete');
+            });
+                   
+                
+            }
+        }
+            
+         
+}]);
+

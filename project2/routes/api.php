@@ -26,3 +26,16 @@ Route::get('/Products/{Product}', 'ProductController@show')->name('Products.show
 Route::put('/Products/{Product}', 'ProductController@update')->name('Products.update');
 
 Route::delete('/Products/{Product}', 'ProductController@destroy')->name('Products.destroy');
+
+
+
+
+Route::get('/Orders', 'OrderController@getAll')->name('Orders.getAll');
+
+Route::post('/Orders', 'OrderController@create')->name('Orders.create');
+
+Route::get('/Orders/{Order}', 'OrderController@show')->name('Orders.show');
+
+Route::put('/Orders/{Order}', 'OrderController@update')->name('Orders.update');
+
+Route::delete('/Orders/{Order}', 'OrderController@destroy')->name('Orders.destroy');
